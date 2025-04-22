@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:study/screens/login/login.screen.dart';
+import 'package:study/screens/homepage/homepage.screen.dart';
 import 'package:study/services/auth_service.dart';
 import 'package:study/services/rtdb_service.dart';
 
@@ -31,7 +31,9 @@ class _RegistrationPageScreenState extends State<RegistrationPageScreen> {
         // await _rtdbService.saveUserInfoToRTDB(
         //   user: _emailController.text.trim(),
         // );
-        context.replace(LoginPageScreen.routeName);
+        if (mounted) {
+          context.replace(HomePageScreen.routeName);
+        }
       } catch (e) {
         _showError(e.toString());
       }

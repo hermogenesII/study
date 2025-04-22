@@ -24,12 +24,13 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: [
-                  // TextField(
-                  //   decoration: const InputDecoration(
-                  //     labelText: 'Type a message,',
-
-                  //   ),
-                  // ),
+                  Expanded(
+                    child: TextField(
+                      decoration: const InputDecoration(
+                        labelText: 'Type a message,',
+                      ),
+                    ),
+                  ),
                   IconButton(onPressed: () {}, icon: Icon(Icons.send)),
                 ],
               ),
