@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:study/screens/login/login.screen.dart';
 import 'package:study/services/auth_service.dart';
+import 'package:study/services/rtdb_service.dart';
 
 class RegistrationPageScreen extends StatefulWidget {
   const RegistrationPageScreen({super.key});
@@ -12,6 +15,7 @@ class RegistrationPageScreen extends StatefulWidget {
 class _RegistrationPageScreenState extends State<RegistrationPageScreen> {
   final _formKey = GlobalKey<FormState>();
   final _authService = AuthService();
+  final _rtdbService = RTDBService();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -23,7 +27,11 @@ class _RegistrationPageScreenState extends State<RegistrationPageScreen> {
           _emailController.text.trim(),
           _passwordController.text.trim(),
         );
-        context.pop();
+
+        // await _rtdbService.saveUserInfoToRTDB(
+        //   user: _emailController.text.trim(),
+        // );
+        context.replace(LoginPageScreen.routeName);
       } catch (e) {
         _showError(e.toString());
       }
@@ -32,6 +40,13 @@ class _RegistrationPageScreenState extends State<RegistrationPageScreen> {
 
   void _showError(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override

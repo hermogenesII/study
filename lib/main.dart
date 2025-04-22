@@ -2,7 +2,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_locale/easy_locale.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+// import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:study/firebase_options.dart';
 // import 'package:study/screens/homepage/homepage.screen.dart';
 // import 'package:study/screens/login/login.screen.dart';
@@ -29,13 +29,12 @@ class MyApp extends StatelessWidget {
       routerConfig: routerConfig,
       title: 'Flutter Study',
 
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-
-      supportedLocales: [Locale('en'), Locale('ko')],
+      // localizationsDelegates: const [
+      //   GlobalMaterialLocalizations.delegate,
+      //   GlobalWidgetsLocalizations.delegate,
+      //   GlobalCupertinoLocalizations.delegate,
+      // ],
+      // supportedLocales: [Locale('en'), Locale('ko')],
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),

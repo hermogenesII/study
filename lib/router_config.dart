@@ -1,5 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:study/screens/chat/chat.screen.dart';
+import 'package:study/screens/chat/chat_list.screen.dart';
 import 'package:study/screens/homepage/homepage.screen.dart';
 import 'package:study/screens/login/login.screen.dart';
 import 'package:study/screens/register/register.screen.dart';
@@ -45,6 +47,14 @@ final routerConfig = GoRouter(
     GoRoute(
       path: RegistrationPageScreen.routeName,
       builder: (context, state) => const RegistrationPageScreen(),
+    ),
+    GoRoute(
+      path: ChatPageScreen.routeName,
+      builder: (context, state) => const ChatPageScreen(),
+    ),
+    GoRoute(
+      path: ChatListScreen.routeName,
+      builder: (context, state) => const ChatListScreen(),
     ),
   ],
 );
