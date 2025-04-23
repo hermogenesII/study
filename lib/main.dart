@@ -41,26 +41,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// class AuthWrapper extends StatelessWidget {
-//   static const routeName = '/';
-//   const AuthWrapper({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return StreamBuilder<User?>(
-//       stream: FirebaseAuth.instance.authStateChanges(),
-//       builder: (context, snapshot) {
-//         if (snapshot.connectionState == ConnectionState.waiting) {
-//           return const Center(child: CircularProgressIndicator());
-//         } else if (snapshot.hasData) {
-//           // context.push(HomePageScreen.routeName);
-//           return const HomePageScreen(title: 'home');
-//         } else {
-//           // context.push(LoginPageScreen.routeName);
-//           return const LoginPageScreen();
-//         }
-//       },
-//     );
-//   }
-// }

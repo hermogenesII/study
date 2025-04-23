@@ -1,9 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:study/screens/homepage/homepage.screen.dart';
 import 'package:study/services/auth_service.dart';
-import 'package:study/services/rtdb_service.dart';
+import 'package:study/utils/auth/auth_validator.dart';
+import 'package:study/widgets/auth_text_field.dart';
 
 class RegistrationPageScreen extends StatefulWidget {
   const RegistrationPageScreen({super.key});
@@ -15,22 +15,16 @@ class RegistrationPageScreen extends StatefulWidget {
 class _RegistrationPageScreenState extends State<RegistrationPageScreen> {
   final _formKey = GlobalKey<FormState>();
   final _authService = AuthService();
-  final _rtdbService = RTDBService();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   void _signUp() async {
-    print("Clicked");
     if (_formKey.currentState!.validate()) {
       try {
         await _authService.signUp(
           _emailController.text.trim(),
           _passwordController.text.trim(),
         );
-
-        // await _rtdbService.saveUserInfoToRTDB(
-        //   user: _emailController.text.trim(),
-        // );
         if (mounted) {
           context.replace(HomePageScreen.routeName);
         }
@@ -62,58 +56,36 @@ class _RegistrationPageScreenState extends State<RegistrationPageScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextFormField(
+              ///For Email
+              AuthTextField(
+                label: "Email",
                 controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    print('Email is required');
-                    return 'Email is required';
-                  }
-                  if (!value.contains('@')) return 'Enter a valid email';
-                  return null;
-                },
+                onSubmit: (value) => _signUp(),
+                validator: AuthValidator.validateEmail,
               ),
               const SizedBox(height: 16),
-              TextFormField(
+
+              //For Password
+              AuthTextField(
+                label: "Password",
                 controller: _passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    print("Password is required");
-                    return 'Password is required';
-                  }
-                  if (value.length < 6) {
-                    return 'Password must be atleast 6 characters';
-                  }
-                  return null;
-                },
+                onSubmit: (value) => _signUp(),
+                validator: AuthValidator.validatePassword,
               ),
               const SizedBox(height: 16),
-              TextFormField(
-                obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Confirm Password',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Confirm Password is required';
-                  }
-                  if (value != _passwordController.text) {
-                    return 'Passwords do not match';
-                  }
-                  return null;
-                },
+
+              //For Confirm Password
+              AuthTextField(
+                label: "Confirm Password",
+                onSubmit: (value) => _signUp(),
+                validator:
+                    (value) => AuthValidator.validateConfirmPassword(
+                      value,
+                      _passwordController.text,
+                    ),
               ),
               const SizedBox(height: 16),
+
               ElevatedButton(
                 onPressed: () => _signUp(),
                 child: const Text('Register'),
@@ -125,77 +97,3 @@ class _RegistrationPageScreenState extends State<RegistrationPageScreen> {
     );
   }
 }
-
-// class RegistrationPageScreen extends StatefulWidget {
-//   static const routeName = '/register';
-//   const RegistrationPageScreen({super.key});
-
-//   @override
-//   State<RegistrationPageScreen> createState() => RegistrationPageScreenState();
-// }
-
-// class RegistrationPageScreenState extends State<RegistrationPageScreen> {
-//   final _formKey = GlobalKey<FormState>();
-//   final _authService = AuthService();
-//   final _emailController = TextEditingController();
-//   final _passwordController = TextEditingController();
-
-//   void _signUp() async {
-//     if (_formKey.currentState!.validate()) {
-//       try {
-//         await _authService.signUp(
-//           _emailController.text.trim(),
-//           _passwordController.text.trim(),
-//         );
-//         Navigator.pop(context);
-//       } catch (e) {
-//         _showError(e.toString());
-//       }
-//     }
-//   }
-
-//   void _showError(String msg) {
-//     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text('Sign Up')),
-//       body: Padding(
-//         padding: const EdgeInsets.all(16),
-//         child: Form(
-//           key: _formKey,
-//           child: Column(
-//             children: [
-//               TextFormField(
-//                 controller: _emailController,
-//                 decoration: const InputDecoration(labelText: 'Email'),
-//                 validator: (value) {
-//                   if (value == null || value.trim().isEmpty)
-//                     return 'Email is required';
-//                   if (!value.contains('@')) return 'Enter a valid email';
-//                   return null;
-//                 },
-//               ),
-//               TextFormField(
-//                 controller: _passwordController,
-//                 decoration: const InputDecoration(labelText: 'Password'),
-//                 obscureText: true,
-//                 validator: (value) {
-//                   if (value == null || value.trim().isEmpty)
-//                     return 'Password is required';
-//                   if (value.length < 6)
-//                     return 'Password must be at least 6 characters';
-//                   return null;
-//                 },
-//               ),
-//               const SizedBox(height: 16),
-//               ElevatedButton(onPressed: _signUp, child: const Text('Sign Up')),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }

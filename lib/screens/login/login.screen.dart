@@ -1,11 +1,11 @@
 import 'package:easy_design_system/easy_design_system.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:study/screens/homepage/homepage.screen.dart';
 import 'package:study/screens/register/register.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:study/services/auth_service.dart';
-import 'package:study/services/rtdb_service.dart';
+import 'package:study/utils/auth/auth_validator.dart';
+import 'package:study/widgets/auth_text_field.dart';
 
 class LoginPageScreen extends StatefulWidget {
   const LoginPageScreen({super.key});
@@ -18,28 +18,19 @@ class LoginPageScreen extends StatefulWidget {
 class _LoginPageScreenState extends State<LoginPageScreen> {
   final _formKey = GlobalKey<FormState>();
   final _authService = AuthService();
-  final _rtdbService = RTDBService();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   void _login() async {
-    print("clicked");
     if (_formKey.currentState!.validate()) {
       try {
         await _authService.signIn(
           _emailController.text.trim(),
           _passwordController.text.trim(),
         );
-        await _rtdbService.saveUserInfoToRTDB(
-          _authService.getCurrentUserInfo()!,
-        );
 
-        await _authService.updateUserInfo(
-          "user${_authService.getCurrentUserInfo()!.uid}",
-          "",
-        );
-        print("Succesfully added to RTDB");
         if (mounted) {
+          print("-----> User: ${_authService.getCurrentUserInfo()}");
           context.replace(HomePageScreen.routeName);
         }
       } catch (e) {
@@ -48,19 +39,17 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
     }
   }
 
-  void _loginWithGoogle() async {
-    try {
-      await _authService.signInWithGoogle();
-      await _rtdbService.saveUserInfoToRTDB(_authService.getCurrentUserInfo()!);
-      print("Successfully signed in with Google and added to RTDB");
-      context.replace(HomePageScreen.routeName);
-    } catch (e) {
-      _showError(e.toString());
-    }
-  }
+  // void _loginWithGoogle() async {
+  //   try {
+  //     await _authService.signInWithGoogle();
+  //     await _rtdbService.saveUserInfoToRTDB(_authService.getCurrentUserInfo()!);
+  //     if (mounted) context.replace(HomePageScreen.routeName);
+  //   } catch (e) {
+  //     _showError(e.toString());
+  //   }
+  // }
 
   void _showError(String msg) {
-    print(msg);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
   }
 
@@ -84,45 +73,35 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TextFormField(
+                const SizedBox(height: 16),
+
+                ///For Email
+                AuthTextField(
+                  label: "Email",
                   controller: _emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty)
-                      return 'Email is required';
-                    if (!value.contains('@')) return 'Enter a valid email';
-                    return null;
-                  },
+                  onSubmit: (value) => _login(),
+                  validator: AuthValidator.validateEmail,
                 ),
                 const SizedBox(height: 16),
-                TextFormField(
+
+                //For Password
+                AuthTextField(
+                  label: "Password",
                   controller: _passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty)
-                      return 'Password is required';
-                    if (value.length < 6)
-                      return 'Password must be at least 6 characters';
-                    return null;
-                  },
+                  onSubmit: (value) => _login(),
+                  validator: AuthValidator.validatePassword,
                 ),
                 const SizedBox(height: 16),
+
                 ElevatedButton(
                   onPressed: () => _login(),
                   child: const Text('Login'),
                 ),
-                ElevatedButton.icon(
-                  onPressed: () => _loginWithGoogle(),
-                  icon: const Icon(Icons.login),
-                  label: const Text('Sign in with Google'),
-                ),
+                // ElevatedButton.icon(
+                //   onPressed: () => _loginWithGoogle(),
+                //   icon: const Icon(Icons.login),
+                //   label: const Text('Sign in with Google'),
+                // ),
                 TextButton(
                   onPressed:
                       () => context.push(RegistrationPageScreen.routeName),

@@ -4,6 +4,7 @@ import 'package:study/screens/chat/chat.screen.dart';
 import 'package:study/screens/chat/chat_list.screen.dart';
 import 'package:study/screens/homepage/homepage.screen.dart';
 import 'package:study/screens/login/login.screen.dart';
+import 'package:study/screens/profile/profile.screen.dart';
 import 'package:study/screens/register/register.screen.dart';
 import 'auth_notifier.dart';
 
@@ -22,9 +23,6 @@ final routerConfig = GoRouter(
     final isOnRegister = path == RegistrationPageScreen.routeName;
 
     if (!isLoggedIn && !(isOnLogin || isOnRegister)) {
-      print(user);
-      print(isLoggedIn);
-      print(path);
       return LoginPageScreen.routeName;
     }
 
@@ -50,35 +48,16 @@ final routerConfig = GoRouter(
     ),
     GoRoute(
       path: ChatPageScreen.routeName,
-      builder: (context, state) => const ChatPageScreen(),
+      builder:
+          (context, state) => ChatPageScreen(chatRoomId: state.extra as String),
     ),
     GoRoute(
       path: ChatListScreen.routeName,
       builder: (context, state) => const ChatListScreen(),
     ),
+    GoRoute(
+      path: ProfileScreen.routeName,
+      builder: (context, state) => const ProfileScreen(),
+    ),
   ],
 );
-
-// import 'package:go_router/go_router.dart';
-// import 'package:study/screens/homepage/homepage.screen.dart';
-// import 'package:study/screens/login/login.screen.dart';
-// import 'package:study/screens/register/register.screen.dart';
-
-// final routerConfig = GoRouter(
-//   routes: [
-//     GoRoute(
-//       path: HomePageScreen.routeName,
-//       builder: (context, state) {
-//         return HomePageScreen(title: 'home');
-//       },
-//     ),
-//     GoRoute(
-//       path: LoginPageScreen.routeName,
-//       builder: (context, state) => LoginPageScreen(),
-//     ),
-//     GoRoute(
-//       path: RegistrationPageScreen.routeName,
-//       builder: (context, state) => RegistrationPageScreen(),
-//     ),
-//   ],
-// );
