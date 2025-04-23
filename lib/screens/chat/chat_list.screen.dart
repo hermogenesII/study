@@ -2,6 +2,8 @@ import 'package:easy_design_system/easy_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_ui_database/firebase_ui_database.dart'; // Import firebase_ui_database
 import 'package:firebase_database/firebase_database.dart';
+import 'package:go_router/go_router.dart';
+import 'package:study/screens/chat/chat.screen.dart';
 // import 'package:study/services/auth_service.dart';
 
 class ChatListScreen extends StatefulWidget {
@@ -58,7 +60,8 @@ class ChatListScreenState extends State<ChatListScreen> {
               title: Text(user['displayName'] ?? 'Unknown'),
               subtitle: Text(user['email'] ?? 'No email'),
               onTap: () {
-                // Handle user selection
+                print("Tapped on ${user['displayName']}");
+                context.push(ChatPageScreen.routeName);
               },
             );
           },

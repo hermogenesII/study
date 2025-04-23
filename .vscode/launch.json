@@ -1,17 +1,24 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-
-        {
-            "name": "iPhone 16 Pro Max Study",
-            "request": "launch",
-            "type": "dart",
-            "deviceId": "iPhone 16 Pro Max",
-            "program": "lib/main.dart",
-            "cwd": "."
-        }
-    ]
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "iPhone 16 Pro Max Study",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "iPhone 16 Pro Max",
+      "program": "lib/main.dart",
+      "cwd": "."
+    },
+    {
+      "name": "Study Home",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "108866941T011283",
+      "program": "lib/main.dart",
+      "cwd": "."
+    }
+  ]
 }

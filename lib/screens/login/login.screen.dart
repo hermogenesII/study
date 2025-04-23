@@ -39,7 +39,9 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
           "",
         );
         print("Succesfully added to RTDB");
-        context.replace(HomePageScreen.routeName);
+        if (mounted) {
+          context.replace(HomePageScreen.routeName);
+        }
       } catch (e) {
         _showError(e.toString());
       }
