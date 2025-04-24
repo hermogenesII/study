@@ -5,7 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:study/screens/chat/chat_list.screen.dart';
 import 'package:study/screens/profile/profile.screen.dart';
 import 'package:study/services/auth_service.dart';
-import 'package:study/utils/locale_setup.dart' as custom_locale;
+import 'package:study/services/rtdb_service.dart';
+import 'package:study/widgets/change_language.dart';
 
 class HomePageScreen extends StatefulWidget {
   static const routeName = '/';
@@ -22,8 +23,9 @@ class _HomePageScreenState extends State<HomePageScreen> {
   @override
   void initState() {
     super.initState();
-    lo.set(key: 'Logout', locale: 'en', value: 'Logout');
-    lo.set(key: 'Logout', locale: 'ko', value: '로그아웃');
+    RTDBService().setupPresence();
+    // lo.set(key: 'Logout', locale: 'en', value: 'Logout');
+    // lo.set(key: 'Logout', locale: 'ko', value: '로그아웃');
   }
 
   @override
@@ -33,23 +35,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.title.t),
-          actions: [
-            PopupMenuButton<String>(
-              onSelected: (value) {
-                if (value == 'en') {
-                  custom_locale.LocaleService.instance.setLocale('en');
-                } else if (value == 'ko') {
-                  custom_locale.LocaleService.instance.setLocale('ko');
-                }
-              },
-              itemBuilder:
-                  (context) => [
-                    PopupMenuItem(value: 'en', child: Text('English')),
-                    PopupMenuItem(value: 'ko', child: Text('Korean')),
-                  ],
-              icon: Icon(Icons.language),
-            ),
-          ],
+          actions: [ChangeLanguage()],
         ),
         body: Center(
           child: Column(
@@ -69,18 +55,12 @@ class _HomePageScreenState extends State<HomePageScreen> {
         ),
         bottomNavigationBar: BottomNavigationBar(
           items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'home'.t, // Localized label
-            ),
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'home'.t),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
-              label: 'profile'.t, // Localized label
+              label: 'profile'.t,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.chat),
-              label: 'chat'.t, // Localized label
-            ),
+            BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'chat'.t),
           ],
           onTap: (index) {
             switch (index) {
@@ -105,27 +85,27 @@ class _HomePageScreenState extends State<HomePageScreen> {
                   color: Theme.of(context).primaryColor,
                 ),
                 child: Text(
-                  'Navigation Menu',
+                  'Sample Side Navigation',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
               ListTile(
                 leading: Icon(Icons.home),
-                title: Text('home'.t), // Localized text
+                title: Text('home'.t),
                 onTap: () {
                   // Navigate to Home
                 },
               ),
               ListTile(
                 leading: Icon(Icons.person),
-                title: Text('profile'.t), // Localized text
+                title: Text('profile'.t),
                 onTap: () {
                   context.push(ProfileScreen.routeName);
                 },
               ),
               ListTile(
                 leading: Icon(Icons.chat),
-                title: Text('chat'.t), // Localized text
+                title: Text('chat'.t),
                 onTap: () {
                   context.push(ChatListScreen.routeName);
                 },

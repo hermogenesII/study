@@ -13,39 +13,8 @@ class LocaleService {
     locale.value = Locale(localeCode);
     lo.setLocale(localeCode);
   }
-
-  void init({
-    required bool deviceLocale,
-    required String defaultLocale,
-    required String fallbackLocale,
-    required bool useKeyAsDefaultText,
-  }) {
-    LocaleService.instance.setLocale(defaultLocale);
-    lo.init(
-      deviceLocale: deviceLocale,
-      defaultLocale: defaultLocale,
-      fallbackLocale: fallbackLocale,
-      useKeyAsDefaultText: useKeyAsDefaultText,
-    );
-  }
 }
 
-/// Initializes the locale service with default settings.
-/// - `deviceLocale`: Automatically detects the device's locale.
-/// - `defaultLocale`: Sets the default locale to English ('en').
-/// - `fallbackLocale`: Sets the fallback locale to English ('en').
-/// - `useKeyAsDefaultText`: Uses the key as default text if translation is missing.
-void initializeLocaleService() {
-  LocaleService.instance.init(
-    deviceLocale: true,
-    defaultLocale: 'en',
-    fallbackLocale: 'en',
-    useKeyAsDefaultText: true,
-  );
-}
-
-/// Sets up translations for the application.
-/// - Adds translations for 'home', 'profile', 'chat', and 'logout' in English and Korean.
 void setupTranslations() {
   lo.merge({
     'home': {'en': 'Home', 'ko': '홈'},

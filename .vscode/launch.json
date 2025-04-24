@@ -13,6 +13,14 @@
       "cwd": "."
     },
     {
+      "name": "iPhone 16 Plus Study",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "iPhone 16 Plus",
+      "program": "lib/main.dart",
+      "cwd": "."
+    },
+    {
       "name": "Study Home",
       "request": "launch",
       "type": "dart",

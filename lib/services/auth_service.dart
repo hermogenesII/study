@@ -27,6 +27,10 @@ class AuthService {
 
   //To sign out
   Future<void> signOut() async {
+    await RTDBService().setUserOffline();
+    // await RTDBService().setupPresence();
+    // Explicitly set user status to offline during sign-out
+
     await _auth.signOut();
   }
 

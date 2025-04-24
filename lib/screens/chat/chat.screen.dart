@@ -1,4 +1,5 @@
 import 'package:easy_design_system/easy_design_system.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_ui_database/firebase_ui_database.dart';
 import 'package:flutter/material.dart';
 import 'package:study/services/auth_service.dart';
@@ -16,6 +17,7 @@ class ChatPageScreen extends StatefulWidget {
 }
 
 class _ChatPageScreenState extends State<ChatPageScreen> {
+  List status = [];
   AuthService authService = AuthService();
   RTDBService rtdbService = RTDBService();
   TextEditingController textController = TextEditingController();
@@ -36,7 +38,36 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
     return Theme(
       data: ComicTheme.of(context),
       child: Scaffold(
-        appBar: AppBar(title: Text("Chats")),
+        appBar: AppBar(
+          title: StreamBuilder(
+            stream:
+                rtdbService.database
+                    .ref("users/${widget.chatRoomId}/status")
+                    .onValue,
+            builder: (context, snapshot) {
+              if (snapshot.hasData &&
+                  (snapshot.data! as DatabaseEvent).snapshot.value != null) {
+                final data =
+                    (snapshot.data! as DatabaseEvent).snapshot.value as Map;
+                final state = data["state"];
+                final lastChanged = DateTime.fromMillisecondsSinceEpoch(
+                  data["last_changed"],
+                );
+
+                return Column(
+                  children: [
+                    Text(widget.chatRoomId),
+                    Text(
+                      state == "online" ? "Online" : "Last seen: $lastChanged",
+                    ),
+                  ],
+                );
+              } else {
+                return Text("Loading...");
+              }
+            },
+          ),
+        ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [

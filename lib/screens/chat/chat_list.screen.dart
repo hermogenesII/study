@@ -23,12 +23,25 @@ class ChatListScreenState extends State<ChatListScreen> {
         query: _rtdbService.database.ref().child('users'),
         itemBuilder: (context, snapshot) {
           final user = snapshot.value as Map<dynamic, dynamic>? ?? {};
-          return ListTile(
-            title: Text(user['displayName'] ?? 'Unknown'),
-            subtitle: Text(user['email'] ?? 'No email'),
-            onTap: () {
-              context.push(ChatPageScreen.routeName, extra: user['uid']);
-            },
+          return Row(
+            children: [
+              Icon(
+                Icons.circle,
+                color:
+                    user['status']['state'] == 'online'
+                        ? Colors.green
+                        : Colors.grey,
+              ),
+              Expanded(
+                child: ListTile(
+                  title: Text(user['displayName'] ?? 'Unknown'),
+                  subtitle: Text(user['email'] ?? 'No email'),
+                  onTap: () {
+                    context.push(ChatPageScreen.routeName, extra: user['uid']);
+                  },
+                ),
+              ),
+            ],
           );
         },
       ),
