@@ -48,8 +48,13 @@ final routerConfig = GoRouter(
     ),
     GoRoute(
       path: ChatPageScreen.routeName,
-      builder:
-          (context, state) => ChatPageScreen(chatRoomId: state.extra as String),
+      builder: (context, state) {
+        final data = state.extra as Map<String, dynamic>;
+        return ChatPageScreen(
+          chatRoomId: data['roomID'],
+          userName: data['userName'],
+        );
+      },
     ),
     GoRoute(
       path: ChatListScreen.routeName,

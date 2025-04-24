@@ -9,8 +9,9 @@ import 'package:study/widgets/chat_text_field.dart';
 class ChatPageScreen extends StatefulWidget {
   static const routeName = '/chat';
   final String chatRoomId;
+  final String? userName;
 
-  const ChatPageScreen({required this.chatRoomId, super.key});
+  const ChatPageScreen({required this.chatRoomId, this.userName, super.key});
 
   @override
   State<ChatPageScreen> createState() => _ChatPageScreenState();
@@ -41,22 +42,20 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
         appBar: AppBar(
           title: StreamBuilder(
             stream:
-                rtdbService.database
-                    .ref("users/${widget.chatRoomId}/status")
-                    .onValue,
+                rtdbService.database.ref("users/${widget.chatRoomId}").onValue,
             builder: (context, snapshot) {
               if (snapshot.hasData &&
                   (snapshot.data! as DatabaseEvent).snapshot.value != null) {
                 final data =
                     (snapshot.data! as DatabaseEvent).snapshot.value as Map;
-                final state = data["state"];
+                final state = data["status"]["state"];
                 final lastChanged = DateTime.fromMillisecondsSinceEpoch(
-                  data["last_changed"],
+                  data["status"]["last_changed"],
                 );
 
                 return Column(
                   children: [
-                    Text(widget.chatRoomId),
+                    Text(data["displayName"]),
                     Text(
                       state == "online" ? "Online" : "Last seen: $lastChanged",
                     ),

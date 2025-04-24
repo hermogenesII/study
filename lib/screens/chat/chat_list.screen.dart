@@ -37,7 +37,13 @@ class ChatListScreenState extends State<ChatListScreen> {
                   title: Text(user['displayName'] ?? 'Unknown'),
                   subtitle: Text(user['email'] ?? 'No email'),
                   onTap: () {
-                    context.push(ChatPageScreen.routeName, extra: user['uid']);
+                    context.push(
+                      ChatPageScreen.routeName,
+                      extra: {
+                        "roomID": user['uid'],
+                        "userName": user['displayName'],
+                      },
+                    );
                   },
                 ),
               ),
