@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 
 class ChatTextField extends StatelessWidget {
   final TextEditingController? textController;
+  final Function(String?)? pickImage;
   final Function(String?)? onSendMessage;
 
-  const ChatTextField({this.textController, this.onSendMessage, super.key});
+  const ChatTextField({
+    this.textController,
+    this.pickImage,
+    this.onSendMessage,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +18,7 @@ class ChatTextField extends StatelessWidget {
       child: Row(
         children: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => pickImage!(null),
             icon: Icon(Icons.camera_alt),
             iconSize: 49,
           ),

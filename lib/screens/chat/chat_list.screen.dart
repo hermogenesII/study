@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_ui_database/firebase_ui_database.dart';
 import 'package:go_router/go_router.dart';
 import 'package:study/screens/chat/chat.screen.dart';
+import 'package:study/screens/chat/chat_group.screen.dart';
 import 'package:study/services/rtdb_service.dart';
 
 class ChatListScreen extends StatefulWidget {
@@ -18,7 +19,15 @@ class ChatListScreenState extends State<ChatListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Chatlists")),
+      appBar: AppBar(
+        title: Text("Chatlists"),
+        actions: [
+          IconButton(
+            onPressed: () => context.push(ChatGroupScreen.routeName),
+            icon: Icon(Icons.group),
+          ),
+        ],
+      ),
       body: FirebaseDatabaseListView(
         query: _rtdbService.database.ref().child('users'),
         itemBuilder: (context, snapshot) {
@@ -51,6 +60,9 @@ class ChatListScreenState extends State<ChatListScreen> {
           );
         },
       ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   items: [BottomNavigationBarItem(icon: Icon(Icons.chat_sharp))],
+      // ),
     );
   }
 }

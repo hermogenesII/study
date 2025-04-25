@@ -79,14 +79,26 @@ class RTDBService {
     return null;
   }
 
-  // Check account presence
-
   // Save message sent to RTDB
-  Future<void> sendMessage(String message, String chatroomId) async {
+  Future<void> sendMessage(
+    String? message,
+    String? imageFile,
+    String chatroomId,
+  ) async {
     await _database.ref("chats/$chatroomId").push().set({
       'senderId': AuthService().getCurrentUserInfo()!.uid,
-      'message': message,
+      'message': {"text": message, "image": imageFile},
       "createdAt": ServerValue.timestamp,
+    });
+  }
+
+  Future<void> createGroup(String groupName, List<String> selectedUsers) async {
+    final groupId = _database.ref("chats").child("groupChats").push().key;
+    final groupRef = _database.ref("chats/groupChats/$groupId");
+    await groupRef.set({
+      'groupName': groupName,
+      'createdAt': ServerValue.timestamp,
+      'members': selectedUsers,
     });
   }
 

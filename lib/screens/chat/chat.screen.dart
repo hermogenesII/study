@@ -2,6 +2,7 @@ import 'package:easy_design_system/easy_design_system.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_ui_database/firebase_ui_database.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:study/services/auth_service.dart';
 import 'package:study/services/rtdb_service.dart';
 import 'package:study/widgets/chat_text_field.dart';
@@ -28,10 +29,20 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
         ..sort()).join("--");
 
   Future<void> _sendMessage(String? value) async {
+    String? imageUrl =
+        "https://firebasestorage.googleapis.com/v0/b/withcenter-test-4.appspot.com/o/posts%2F1742810074288.jpg?alt=media&token=a7766d9f-39da-4e5a-9d3a-a65e629f7015";
     String message = textController.text.trim();
     if (message.isEmpty) return;
-    await rtdbService.sendMessage(message, chatRoomId);
+    await rtdbService.sendMessage(message, imageUrl, chatRoomId);
     textController.clear();
+  }
+
+  Future<String?> _pickImage() async {
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    // if (image != null) {
+    //   print("Image path: ${image.path}");
+    // }
+    // return null;
   }
 
   @override
@@ -95,7 +106,18 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(data['message'], style: TextStyle(fontSize: 16)),
+                          data["message"].runtimeType == String
+                              ? Text(data['message'])
+                              : (data["message"]["image"] != null
+                                  ? Image.network(data['message']['image'])
+                                  : Text("")),
+                          // if (data['message']["image"] != null)
+                          //   Image.network(data['message']['image']),
+                          // if (data['message']["text"] != null)
+                          //   Text(
+                          //     data['message']["text"],
+                          //     style: TextStyle(fontSize: 16),
+                          //   ),
                           SizedBox(height: 5),
                           Text(
                             DateTime.fromMillisecondsSinceEpoch(
@@ -113,6 +135,7 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
             ChatTextField(
               textController: textController,
               onSendMessage: (value) => _sendMessage(value),
+              pickImage: (_) => _pickImage(),
             ),
           ],
         ),
